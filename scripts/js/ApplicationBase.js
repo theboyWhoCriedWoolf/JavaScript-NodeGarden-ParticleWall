@@ -185,23 +185,24 @@ define( [ 'scripts/js/helper/utils.js' ], function()
 		// check particle bounds
 		function chekBounds( particle ) 
 		{
-			var halfRadius  = particle.radius / 2;
+			var halfRadius  = particle.radius;
 			
-			if( particle.x < ( - halfRadius ) )
+			if( particle.x > _canvas.width )
 			{
-				particle.x = ( _canvas.width + halfRadius );
+				particle.x = -particle.radius;
 			}
-			else if( particle.x > ( _canvas.width + halfRadius ) )
+			else if( particle.x < -particle.radius )
 			{
-				particle.x = ( -halfRadius );
+				particle.x = _canvas.width;
 			}
-			if( particle.y < ( -halfRadius ) )
+			
+			if( particle.y > _canvas.height )
 			{
-				particle.y = ( _canvas.height - halfRadius );
+				particle.y = -particle.radius
 			}
-			else if ( particle.y > ( _canvas.height + halfRadius ) )
+			else if ( particle.y < -particle.radius )
 			{
-				particle.y = ( -halfRadius );
+				particle.y = _canvas.height;
 			}
 		}
 		
