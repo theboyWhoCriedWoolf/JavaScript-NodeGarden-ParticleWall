@@ -62,7 +62,6 @@ require
 		_currentViewRef = clazzRef;
 		
 		var Clazz = ( clazzRef == NODEGARDEN_REF ) ? NodeGardenClass : ParticleWallClass;
-		console.log( clazzRef );
 		
 		if( _currentView )
 		{

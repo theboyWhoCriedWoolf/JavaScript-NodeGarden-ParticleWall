@@ -22,7 +22,7 @@ define( [ "scripts/js/helper/Class.js","scripts/js/plugins/jquery.easing.1.3.js"
 			removeListeners : function() { this._chevron.removeEventListener( "click", this.click_handler ); },
 			click_handler : function( event ) {},  // override to tween correct panel
 			tweenPanel : tweenPanel,			   // tween panel
-			elementName : "lalalal",						// define element name
+			elementName : "",						// define element name
 			// set the chevron and align
 			setChevron : function( positionLeft, panelHeight, panelWidth, arrowPadding )
 			{
