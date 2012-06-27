@@ -1,4 +1,4 @@
-define( [ "scripts/js/helper/Class.js", "scripts/js/plugins/TweenLite.min.js", "scripts/js/plugins/CSSPlugin.js", "scripts/js/helper/Stats.js", "scripts/js/plugins/MinimalComps-0.1.min.js" ], function () 
+define( [ "scripts/js/helper/Class.js","scripts/js/plugins/jquery.easing.1.3.js", "scripts/js/plugins/TweenLite.min.js", "scripts/js/plugins/CSSPlugin.js", "scripts/js/helper/Stats.js", "scripts/js/plugins/MinimalComps-0.1.min.js" ], function () 
 {
 	var _stats;
 	var _canvas;
@@ -22,10 +22,12 @@ define( [ "scripts/js/helper/Class.js", "scripts/js/plugins/TweenLite.min.js", "
 			removeListeners : function() { this._chevron.removeEventListener( "click", this.click_handler ); },
 			click_handler : function( event ) {},  // override to tween correct panel
 			tweenPanel : tweenPanel,			   // tween panel
+			elementName : "lalalal",						// define element name
 			// set the chevron and align
 			setChevron : function( positionLeft, panelHeight, panelWidth, arrowPadding )
 			{
 				this._panelClosePos = panelWidth;
+				
 				// set initial chevron position
 				this._chevronArrow.style.backgroundPosition = "-8px";
 				
@@ -52,6 +54,7 @@ define( [ "scripts/js/helper/Class.js", "scripts/js/plugins/TweenLite.min.js", "
 				this._chevron.style.left 			= "0px";
 				this._chevron.style.height			= "0px";
 				this._chevronArrow.style.margin 	= "0px";
+				this.removeListeners();
 			},
 			removeChildren : removeChildren
 			
@@ -103,11 +106,10 @@ define( [ "scripts/js/helper/Class.js", "scripts/js/plugins/TweenLite.min.js", "
 	/*
 	 * click handler
 	 */
-	function tweenPanel( element, instance )
+	function tweenPanel( instance )
 	{
-		if( element === null ) return;
-		if( instance._open ) TweenLite.to( element, .5, { css : { left: instance._panelClosePos } } );
-		else TweenLite.to( element, .5, { css : { left : 0 } } );
+		if( instance._open ) $( instance.elementName ).animate({ left: instance._panelClosePos }, "1000", "easeOutQuad"  )
+		else $( instance.elementName ).animate({ left: "0px" } )
 		instance._chevronArrow.style.backgroundPosition = ( instance._open ) ? "0px" : "-8px";
 		instance._open = !instance._open;
 	}

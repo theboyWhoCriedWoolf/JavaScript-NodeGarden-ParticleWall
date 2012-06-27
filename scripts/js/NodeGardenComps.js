@@ -34,12 +34,14 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		 */
 		init : function( compsElementName, width, height, colour )
 		{
-			this._super( false ); // call init on super
+			this._super( ); // call init on super
 			
-			_div 			= $( compsElementName ).get(0);;
-			_elementWidth 	= width;
-			_elementHeight 	= height;
-			_compsColour	= colour;
+			_div 					= $( compsElementName ).get(0);;
+			_elementWidth 			= width;
+			_elementHeight 			= height;
+			_compsColour			= colour;
+			
+			this.elementName 		= compsElementName;
 			
 			// apply local handler to global handler function variable
 			_showStats_handler = this.showStats_handler;
@@ -49,11 +51,11 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		activetView : function()
 		{
 			setUpComps(  );
-			this.setChevron( _elementWidth , _elementHeight, -250, "43px auto" );
+			this.setChevron( _elementWidth , _elementHeight, "-250px", "43px auto" );
 		},
 		click_handler : function( event ) // override click ahndler and tween panel
 		{
-			_instance.tweenPanel( _div, _instance );
+			_instance.tweenPanel( _instance );
 		},
 		// define handlers
 		setMinDistanceHandler 	: function( handler ) { _minimumDistance_handler = handler; }, 	// min distance
@@ -86,6 +88,7 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		_div.style.backgroundColor = _compsColour;
 		_div.style.width = _elementWidth;
 		_div.style.height = _elementHeight;
+		_div.style.left = "0px";
 		_div.style.position = "absolute"
 		
 		// minimum distance slider

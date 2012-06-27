@@ -9,8 +9,6 @@ html {
 }
 
 .selectionPanel {
-	width : 100px;
-	height : 50px;
 	position: absolute;
 	background : #3ba790;
 }

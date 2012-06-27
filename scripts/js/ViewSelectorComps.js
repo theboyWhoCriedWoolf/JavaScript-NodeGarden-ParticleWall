@@ -25,10 +25,12 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		{
 			this._super( $("#compsSelectionPanelBtn").get(0), $("#selectionCompsArrow").get(0) ); // call init on super
 			
-			_div 			= $( compsElementName ).get(0);;
-			_elementWidth 	= width;
-			_elementHeight 	= height;
-			_compsColour	= colour;
+			_div 				= $( compsElementName ).get(0);;
+			_elementWidth 		= width;
+			_elementHeight 		= height;
+			_compsColour		= colour;
+			
+			this.elementName 	= compsElementName;
 			
 			// apply local handler to global handler function variable
 			_showStats_handler = this.showStats_handler;
@@ -39,11 +41,11 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		activateView : function()
 		{
 			setUpComps();
-			this.setChevron( _elementWidth , _elementHeight, -100, "14px 0 0 3px" );
+			this.setChevron( _elementWidth , _elementHeight, "-100px", "14px 0 0 3px" );
 		},
 		click_handler : function( event ) // override click ahndler and tween panel
 		{
-			_instance.tweenPanel( _div, _instance );
+			_instance.tweenPanel( _instance );
 		},
 		// define handlers
 		setShowNodeGardenHandler 	: function( handler ) { _showNodeGarden_handler = handler; }, 	// min distance
