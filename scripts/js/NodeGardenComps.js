@@ -17,12 +17,17 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 	var _removeColour_handler;
 	var _gravitate_handler;
 	var _showStats_handler;
+	var _halo_handler;
+	var _eclipse_handler;
 	
 	var _div;
 	var _elementWidth;
 	var _elementHeight;
 	var _compsColour;
 	var _instance;
+	
+	var _addHaloCheckbox;
+	var _addHaloCheckbox;
 	
 	/*
 	 * NodeGardenComps Class
@@ -50,8 +55,8 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		// activate view 
 		activetView : function()
 		{
-			setUpComps(  );
-			this.setChevron( _elementWidth , _elementHeight, "-250px", "43px auto" );
+			setUpComps( );
+			this.setChevron( _elementWidth , _elementHeight, "-" + _elementWidth, "43px auto" );
 		},
 		click_handler : function( event ) // override click ahndler and tween panel
 		{
@@ -64,6 +69,11 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		setColourChoiceHandler 	: function( handler ) { _colourChoice_handler = handler; },		// colour choice
 		setRemoveColourHandler 	: function( handler ) { _removeColour_handler = handler; },		// remove colour mix
 		setGravitateHandler 	: function( handler ) { _gravitate_handler = handler; },		// gravitate instead of spring
+		setHaloHandler		 	: function( handler ) { _halo_handler = handler; },				// add halo to particles
+		setEclipseHandler		: function( handler ) { _eclipse_handler = handler; },			// add eclipse effect to particles
+		
+		
+		
 		// dispose
 		dispose : function()
 		{
@@ -120,6 +130,31 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		gravitateCheckbox = new mc.CheckBox( _div, 130, 50, "Gravitate", false,  _gravitate_handler );
 		// show stats
 		showStatsCheckbox = new mc.CheckBox( _div, 130, 70, "Stats", false, _showStats_handler );
+		// add halo checkbox
+		_addHaloCheckbox	= new mc.CheckBox( _div, 230, 10, "Add Halo", false, switchSelectors );
+		// eclipse
+		_addEclipse	= new mc.CheckBox( _div, 230, 30, "Eclipse", false, switchSelectors );
+		
+	}
+	
+	/*
+	 * makes sure only one of the two selections 
+	 * can be active at any one time
+	 */
+	function switchSelectors( event ) 
+	{
+		switch(  event.getLabel()  )
+		{
+			case "Eclipse":
+				_eclipse_handler( event );
+				_addHaloCheckbox.setSelected( false );
+				break;
+				
+			case  "Add Halo":
+				_halo_handler( event );
+				_addEclipse.setSelected( false );
+				break;
+		}
 	}
 	
 })

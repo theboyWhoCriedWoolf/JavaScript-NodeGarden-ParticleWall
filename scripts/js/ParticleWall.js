@@ -10,7 +10,7 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/ParticleWallComps.js", "sc
 		
 		// static vars
 		var BACKGROUND_COLOUR 	= "#3ba790";
-		var COMPS_WIDTH			= "625px";
+		var COMPS_WIDTH			= "710px";
 		var COMPS_HEIGHT		= "40px";
 	
 		// define the nodegarden object
@@ -42,6 +42,8 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/ParticleWallComps.js", "sc
 		
 		// comps
 		var _currentRadius = 0;
+		// set the fill state of the particles
+		var _particleFillState	= "";
 		
 		
 		particleWallClazz.init = function( context, canvas )
@@ -70,6 +72,8 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/ParticleWallComps.js", "sc
 			_comps.radius_handler( radius_handler )
 			_comps.showSmile_handler( showSmile_handler )
 			_comps.setShowStatsHandler( showStats_handler )
+			_comps.setHaloHandler( halo_handler );
+			_comps.setEclipseHandler( eclipse_handler );
 			
 			_comps.activetView();			// show comps
 			createParticles(); 				// create particles
@@ -174,6 +178,7 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/ParticleWallComps.js", "sc
 					particle.y 			= ( yPos + ( _doubleRadius + _particleMagin ) * r );
 					particle.vx			= Math.random() * 6 - 3;
 					particle.vy 		= Math.random() * 6 - 3;
+					particle.setFillStyle( _particleFillState );
 					particle.mass 		= _particleRadius;	
 					particle.setStartingPosition( particle.x, particle.y );
 					_appBase.particlesArray().push( particle ); // populate base app array	
@@ -343,6 +348,39 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/ParticleWallComps.js", "sc
 			// move to position
 			particle.x += particle.vx;
 			particle.y += particle.vy;
+		}
+		
+			// halo handler
+		function halo_handler( event ) 
+		{ 
+			_particleFillState = ( event.getSelected() ) ? "haloFill" : "regulareFill"; 
+			refreshParticleViewState();
+		}
+		// eclispe handler
+		function eclipse_handler( event ) 
+		{ 
+			_particleFillState = ( event.getSelected() ) ? "eclipseFill" : "regulareFill"; 
+			refreshParticleViewState();
+		}
+		
+		/*
+		 * refresh particle view
+		 */
+		function refreshParticleViewState()  
+		{
+			
+			_appBase.stopAnimation(); // stop animation
+
+			var particlesArr 	= _appBase.particlesArray();
+			var arrayLength		= particlesArr.length;
+			var i = arrayLength;
+			var particle;
+			while( --i > -1 )
+			{
+				particle = particlesArr[ i ];
+				particle.setFillStyle( _particleFillState )
+			}
+			_appBase.startAnimation(); // start animation
 		}
 	
 	// ] 

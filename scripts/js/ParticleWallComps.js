@@ -19,6 +19,9 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 	var _radius_handler;
 	var _showSmile_handler;
 	var _showStats_handler;
+	var _halo_handler;
+	var _eclipse_handler;
+	
 	// components
 	var _frictionSlider;
 	var _fLabel;
@@ -28,6 +31,8 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 	var _massLabel;
 	var _particleRadiusSlider;
 	var _pLabel;
+	var _addHaloCheckbox;
+	var _addHaloCheckbox;
 	
 	
 	var _div;
@@ -65,7 +70,7 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		activetView : function()
 		{
 			setUpComps();
-			this.setChevron( _elementWidth , _elementHeight, "-625px", "10px auto" );
+			this.setChevron( _elementWidth , _elementHeight, "-" + _elementWidth, "10px auto" );
 		},
 		click_handler : function( event ) // override click ahndler and tween panel
 		{
@@ -77,6 +82,9 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		mouseMass_handler 		: function( handler ) { _mouseMass_handler = handler; }, 		// Mouse Mass
 		radius_handler		 	: function( handler ) { _radius_handler = handler; }, 			// radius
 		showSmile_handler	 	: function( handler ) { _showSmile_handler = handler; }, 		// show Smile
+		setHaloHandler		 	: function( handler ) { _halo_handler = handler; },				// add halo to particles
+		setEclipseHandler		: function( handler ) { _eclipse_handler = handler; },			// add eclipse effect to particles
+		
 		// dispose
 		dispose : function()
 		{
@@ -135,6 +143,7 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		_particleRadiusSlider.setMinimum( 2 );
 		_particleRadiusSlider.updateLabel();
 		_pLabel = new mc.Label(_div, 400, 25, "Radius" ).setAlign("left");
+		
 	
 	// ]
 		
@@ -142,8 +151,31 @@ define( ["scripts/js/CompsBase.js"], function( CompsBase )
 		_smileCheckbox = new mc.CheckBox( _div, 520, 10, "Smile" , false, _showSmile_handler );
 		// show stats
 		_showStatsCheckbox = new mc.CheckBox(_div, 560, 10, "Stats", false, _showStats_handler );
+		// add halo checkbox
+		_addHaloCheckbox	= new mc.CheckBox( _div, 600, 10, "Add Halo", false, switchSelectors );
+		// eclipse
+		_addEclipse	= new mc.CheckBox( _div, 658, 10, "Eclipse", false, switchSelectors );
 	}
 	
+	/*
+	 * makes sure only one of the two selections 
+	 * can be active at any one time
+	 */
+	function switchSelectors( event ) 
+	{
+		switch(  event.getLabel()  )
+		{
+			case "Eclipse":
+				_eclipse_handler( event );
+				_addHaloCheckbox.setSelected( false );
+				break;
+				
+			case  "Add Halo":
+				_halo_handler( event );
+				_addEclipse.setSelected( false );
+				break;
+		}
+	}
 	
 	
 });

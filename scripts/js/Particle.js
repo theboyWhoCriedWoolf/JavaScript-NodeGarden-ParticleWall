@@ -17,6 +17,7 @@ function Particle(  initialRadius, initialColour, useFilters )
 	var blurIncrement 		= .1;
 	var currentBlurr 		= 0;
 	var shadowColourTint;
+	var _fillOption			= regFill;
 	
 
 // [  properteis
@@ -51,6 +52,32 @@ function Particle(  initialRadius, initialColour, useFilters )
  
  // [ DRAWING 
  
+ 	// setup fill styles
+ 	myParticle.REGULAR		 	= "regulareFill";
+ 	myParticle.ECLIPSE		 	= "eclipseFill";
+ 	myParticle.HALO			 	= "haloFill";
+ 	
+ 	// choose fill option
+ 	myParticle.setFillStyle = function( style )
+ 	{
+ 		switch( style )
+ 		{
+ 			case this.REGULAR :
+ 				_fillOption = regFill;
+ 				break;
+ 			case this.ECLIPSE :
+ 				_fillOption = eclipseFill;
+ 				break;
+ 			case this.HALO :
+ 				_fillOption = haloFill;
+ 				break;
+ 			
+ 			default :
+ 				_fillOption = regFill;
+ 				break;
+ 		}
+ 	}
+ 
  	// draw the particle each frame using the canvas context
  	myParticle.draw = function( context )
  	{
@@ -60,7 +87,7 @@ function Particle(  initialRadius, initialColour, useFilters )
 	  context.scale( scaleX, scaleY );
 	  
 	  context.lineWidth = lineWidth;
-	  context.fillStyle = this.colour;
+	  context.fillStyle = _fillOption( context );
 	
 	if( _useFilters )  
 	 {
@@ -68,9 +95,10 @@ function Particle(  initialRadius, initialColour, useFilters )
 	 	context.shadowColor = shadowColourTint;
 	 }
 	 
+	 
 	  context.beginPath();
 	  //x, y, radius, start_angle, end_angle, anti-clockwise
-	  context.arc(0, 0, this.radius, 0, (Math.PI * 2), true);
+	  context.arc( 0, 0, this.radius, 0, (Math.PI * 2), true);
 	  context.closePath();
 	  context.fill();
 		  if ( lineWidth > 0) {
@@ -82,6 +110,37 @@ function Particle(  initialRadius, initialColour, useFilters )
  	}
  
  // ] 
+ 
+ // RADIAL FILL METHODS
+ 
+ // return halo fill
+ function haloFill( context ) 
+ {
+ 	 var radgrad = context.createRadialGradient( 0, 0, 1, 0, 0, myParticle.radius );
+     radgrad.addColorStop(.5, myParticle.colour );
+     radgrad.addColorStop( 0.6, utils.colorToRGB( "#000", 1 ) );
+     radgrad.addColorStop( 0.9, "#000" );
+     radgrad.addColorStop( 1, myParticle.colour  );
+     return radgrad;
+ }
+ 
+ // eclipse fill
+ function eclipseFill( context ) 
+ {
+ 	 var radgrad = context.createRadialGradient( 0, 0, 1, 0, 0, myParticle.radius );
+     radgrad.addColorStop( 0, "#000" );
+     radgrad.addColorStop( .8, "#000" );
+     radgrad.addColorStop(.9, myParticle.colour );
+     return radgrad;
+ }
+ 
+ // regular fill
+ function regFill( context ) { return myParticle.colour; }
+ 
+ 
+ 
+ // ] 
+ 
  
  // [ TWEENLITE METHODS
  	

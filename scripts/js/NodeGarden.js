@@ -5,7 +5,7 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 	{
 		// static vars
 		var BACKGROUND_COLOUR 	= "#3ba790";
-		var COMPS_WIDTH			= "250px";
+		var COMPS_WIDTH			= "300px";
 		var COMPS_HEIGHT		= "100px";
 	
 		// Class Object
@@ -28,6 +28,9 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 		var _tintValue			= 0;
 		var _useFilters			= true;
 		var _tintChanged		= false;
+		
+		// set the fill state of the particles
+		var _particleFillState	= "";
 		
 		
 	// [  PUBLIC METHODS
@@ -61,6 +64,9 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 			_comps.setColourChoiceHandler( colourChoice_handler );
 			_comps.setRemoveColourHandler( removeColour_handler );
 			_comps.setGravitateHandler( gravitate_handler ) 	
+			_comps.setHaloHandler( halo_handler );
+			_comps.setEclipseHandler( eclipse_handler );
+
 			
 			// set the comps stats
 			_comps.setShowStatsHandler( showStats_handler );
@@ -108,6 +114,7 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 				particle.y = Math.random() * _canvas.height;
 				particle.vx = Math.random() * 2 - 1;
 				particle.vy = Math.random() * 2 - 1;
+				particle.setFillStyle( _particleFillState );
 				particle.mass = size;		
 				_particlesArray.push( particle ); // populate base app array
 			}  
@@ -137,7 +144,7 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 // 			
 			// creates the line between particle [
 				_context.strokeStyle = utils.colorToRGB( colour ? colour : "#ffffff", 1 - ratio ); 
-				_context.lineWidth = 2 - ratio;
+				_context.lineWidth = 1 - ratio;
 				_context.beginPath();
 				_context.moveTo( particleA.x, particleA.y );
 				_context.lineTo( particleB.x, particleB.y );
@@ -183,7 +190,7 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 			
 			// creates the line between particle [
 				_context.strokeStyle = utils.colorToRGB( colour ? colour : "#ffffff", 1 - ratio ); 
-				_context.lineWidth = 2 - ratio;
+				_context.lineWidth = 1 - ratio;
 				_context.beginPath();
 				_context.moveTo( particleA.x, particleA.y );
 				_context.lineTo( particleB.x, particleB.y );
@@ -307,8 +314,7 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 		function numParticles_handler( event ) 
 		{
 			var value 			= event.getValue();
-			var partArray		= _appBase.particlesArray();
-			var arrayLength		= partArray.length;
+			var arrayLength		= _particlesArray.length;
 			
 			if( value > arrayLength ) // create more
 			{
@@ -327,9 +333,9 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 				
 				while( --i > ( value - 1 ) )
 				{
-					particle = partArray[ i ];
+					particle = _particlesArray[ i ];
 					if( particle ) particle.dispose();
-					partArray.splice( i, 1 );
+					_particlesArray.splice( i, 1 );
 					particle = null;
 				}
 			}
@@ -372,7 +378,40 @@ define([ "scripts/js/ApplicationBase.js", "scripts/js/NodeGardenComps.js", "scri
 		};
 		// pass in the stats from comps
 		function showStats_handler( stats ) { _appBase.setStats( stats ) }
-	
+		
+		// halo handler
+		function halo_handler( event ) 
+		{ 
+			_particleFillState = ( event.getSelected() ) ? "haloFill" : "regulareFill"; 
+			refreshParticleViewState();
+		}
+		// eclispe handler
+		function eclipse_handler( event ) 
+		{ 
+			_particleFillState = ( event.getSelected() ) ? "eclipseFill" : "regulareFill"; 
+			refreshParticleViewState();
+		}
+		
+		/*
+		 * refresh particle view
+		 */
+		function refreshParticleViewState()  
+		{
+			
+			_nodeGardenClazz.stopAnimation(); // stop animation
+
+			var arrayLength		= _particlesArray.length;
+			var i = arrayLength;
+			var particle;
+			while( --i > -1 )
+			{
+				particle = _particlesArray[ i ];
+				particle.setFillStyle( _particleFillState )
+			}
+			_nodeGardenClazz.startAnimation(); // start animation
+		}
+		
+		
 	// ] 
 	
 		// return CLAZZ OBJECT
