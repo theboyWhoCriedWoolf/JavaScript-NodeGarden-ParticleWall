@@ -1,3 +1,9 @@
+requirejs.config({ // load in jquery before plugin
+    shim: {
+        'scripts/js/plugins/jquery.easing.1.3.js': ['scripts/js/plugins/jquery.js'],
+    }
+});
+
  //This callback is called after the scripts finish loading.
 require
 		([ 
@@ -12,6 +18,9 @@ require
 	    // domReady.js provides multi browser support as not all browsers support DOMContentLoaded
 	    domReady(function () { init( NodeGarden, ParticleWall, ViewSelectorComps ); })
 });
+
+
+
 
 	// static consts
 	var BACKGROUND_COLOUR 	= "#3ba790";
@@ -62,7 +71,6 @@ require
 		_currentViewRef = clazzRef;
 		
 		var Clazz = ( clazzRef == NODEGARDEN_REF ) ? NodeGardenClass : ParticleWallClass;
-		
 		if( _currentView )
 		{
 			_currentView.dispose();

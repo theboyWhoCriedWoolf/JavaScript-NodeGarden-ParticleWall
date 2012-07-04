@@ -1,4 +1,9 @@
-define( [ "scripts/js/helper/Class.js","scripts/js/plugins/jquery.easing.1.3.js", "scripts/js/plugins/TweenLite.min.js", "scripts/js/plugins/CSSPlugin.js", "scripts/js/helper/Stats.js", "scripts/js/plugins/MinimalComps-0.1.min.js" ], function () 
+define( [ 
+			"scripts/js/helper/Class.js",
+			"scripts/js/plugins/jquery.easing.1.3.js", 
+			"scripts/js/helper/Stats.js", 
+			"scripts/js/plugins/MinimalComps-0.1.min.js" 
+		], function () 
 {
 	var _stats;
 	var _canvas;
